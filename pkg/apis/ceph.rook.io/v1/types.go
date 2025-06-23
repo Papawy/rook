@@ -2096,6 +2096,16 @@ type ObjectEndpointSpec struct {
 // +genclient:noStatus
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
+// CephObjectStoreAccount represents a Ceph Object Store Gateway Account
+type CephObjectStoreAccount struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata"`
+	Spec              ObjectStoreAccountSpec `json:"spec"`
+	// +kubebuilder:pruning:PreserveUnknownFields
+	// +optional
+	Status *ObjectStoreAccountStatus `json:"status,omitempty"`
+}
+
 // CephObjectStoreUser represents a Ceph Object Store Gateway User
 // +kubebuilder:resource:shortName=rcou;objectuser;cephosu
 // +kubebuilder:printcolumn:name="Phase",type=string,JSONPath=`.status.phase`
@@ -2138,6 +2148,14 @@ type CephObjectStoreUserList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata"`
 	Items           []CephObjectStoreUser `json:"items"`
+}
+
+// ObjectStoreAccountSpec represents the spec of an Objectstoreaccount
+type ObjectStoreAccountSpec struct {
+	// The store the account will be created in
+	// +optional
+	Store            string `json:"store,omitempty"`
+	ClusterNamespace string `json:"clusterNamespace,omitempty"`
 }
 
 // ObjectStoreUserSpec represent the spec of an Objectstoreuser
